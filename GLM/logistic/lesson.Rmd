@@ -1,0 +1,172 @@
+Lesson Name:  logistic
+Course Name:  GLM
+Type:         Standard
+Author:       Bing He
+Organization: JHU Biostatistics
+Version:      2.1.1
+================================================================
+
+--- &text
+
+This is the first lession "Logistic Regression" of the course "Generalized Linear Regression". In R, the function `glm()` is used to fit generalized linear regression. In this lesson, we will focus on Logistic Regression. There are in total 12 questions in this lesson.
+
+--- &text
+Let's start with an example. Suppose now we need to investigate the toxicity of pyrethroid to the tobacco budworm. 6 leves of doses are given to groups of 20 male and female moths and the numbers of deaths of male and female moths in each group are recorded.
+
+--- &cmd_question
+1. Now let's read in data using `data <- read.csv("./GLM/logistic/toxicity.txt",header=T)`. Now you can either type or copy the command `data <- read.csv("./GLM/logistic/toxicity.txt",header=T)` to read in data.
+
+```{r}
+data <- read.csv("./GLM/logistic/toxicity.txt",header=T)
+```
+
+
+*** .hint
+Answer: `data <- read.csv("./GLM/logistic/toxicity.txt",header=T)`
+
+--- &cmd_question
+2. Now let's take a look at the data using `data`. Now you can either type or copy the command `data`.
+
+```{r}
+data
+```
+
+*** .hint
+Answer: `data`
+
+--- &text
+We can see that each row correspond to a unique combination of sex and level of doses. death and alive give the numbers of deaths and survivals in each group with the specified sex and level of doses. Our goal is to investigate whether the odds of death is associated with level of doses while adjusting for sex.
+
+--- &cmd_question
+3. Now let's fit a logistic regression using `fit <- glm(cbind(dead,alive) ~ sex + ldose, family=binomial, data=data)`. Assume that the number of deaths follow a binomial distribution with 20 moths and a certain propability of being poisoned to death. We now regress the number of deadths and survivals on level of doses and sex. Now you can either type or copy the command `fit <- glm(cbind(dead,alive) ~ sex + ldose, family=binomial, data=data)` to fit the logistic regression model.
+
+```{r}
+fit <- glm(cbind(dead,alive) ~ sex + ldose, family=binomial, data=data)
+```
+
+*** .hint
+Answer: `fit <- glm(cbind(dead,alive) ~ sex + ldose, family=binomial, data=data)`
+
+--- &cmd_question
+4. Now let's look at regression coefficient of the fitted model using `summary(fit)`. Now you can either type or copy the command `summary(fit)` to summarize the regression results.
+
+```{r}
+summary(fit)
+```
+
+*** .hint
+Answer: `summary(fit)`
+
+--- &text
+5. Now let's interpret the regression coefficients. 5.1"SexM 1.1007"" is the estimated regression coefficient for sex; "M" indicates the reference group is male. It suggests that controling for level of doses, the log odds ratios of deaths between male and female moths is "1.1007" with p value "0.00198". 5.2 Simiarly, "1.0642" is the estimated regression coefficient for level of doses. It suggests that controling for sex, with one-level increase in doses, the log odds ratios of deaths will increase by "1.0642" with p value "4.70e-16".
+
+--- &cmd_question
+6. Now let's find the confidence interval of the regression coefficients using `confint(fit, level=0.95)`. Now you can either type or copy the command `confint(fit, level=0.95)` to find the 95% confidence interval.
+
+```{r}
+confint(fit,level=0.95)
+```
+
+*** .hint
+Answer: `confint(fit,level=0.95)`
+
+--- &mult_question
+Congratulations! You have successfully fitted and interpreted a logistic regression model. Now here is a review question for you: what distribution family we should use in `glm()` when fitting logistic regression?
+
+_1. `binomial`_
+2. `identity`
+3. `poisson`
+
+*** .hint
+The command we used for fitting the logistic regression in our example is `fit <- glm(cbind(dead,alive) ~ sex + ldose, family=binomial, data=data)`. We should use `binomial` family.
+
+--- &text
+7. Now let's use another way of formulating data for logistic regression. Using the same example above (i.e., the toxicity of pyrethroid to the tobacco budworm), besides using the count of deaths and survivals out of 20 moths as the outcome, we can also use a binary indicator for the death of each moth. 
+
+--- &cmd_question
+8. Now let's read in the same data in different formulation using `data_long <- read.csv("./GLM/logistic/toxicity_binary.txt",header=T)`. Now you can either type or copy the command `data_long <- read.csv("./GLM/logistic/toxicity_binary.txt",header=T)` to read in data.
+
+```{r}
+data_long <- read.csv("./GLM/logistic/toxicity_binary.txt",header=T)
+```
+
+*** .hint
+Answer: `data_long <- read.csv("./GLM/logistic/toxicity_binary.txt",header=T)`
+
+--- &cmd_question
+9. Now let us take a look at the data using `head(data_long)`. Now you can either type or copy the command `head(data_long)` to see the 1st set of rows.
+
+```{r}
+head(data_long)
+```
+
+*** .hint
+Answer: `head(data_long)`
+
+--- &text
+Now we can examine the new formulation of the data. Each row represents a moth. death is a binary variable now, with 1 indicating death and 0 indicating survival. If we sum up the number of deaths in each unqiue combination of level of doses and sex, we can get exactly the same data set in our previous example.
+
+--- &cmd_question
+10. Now let us fit the same logistic regression using this new data formulation using `fit_long <- glm(dead ~ sex + ldose, family=binomial, data=data_long)`. Now you can either type or copy the command `fit_long <- glm(dead ~ sex + ldose, family=binomial, data=data_long)` to fit the logistic regression.
+
+```{r}
+fit_long <- glm(dead ~ sex + ldose, family=binomial, data=data_long)
+```
+
+*** .hint
+Answer: `fit_long <- glm(dead ~ sex + ldose, family=binomial, data=data_long)`
+
+--- &cmd_question
+11. Now let us examine the regression coefficients using `summary(fit_long)`. Now you can either type or copy the command `summary(fit_long)` to print the summary of regression results.
+
+```{r}
+summary(fit_long)
+```
+
+*** .hint
+Answer: `summary(fit_long)`
+
+--- &cmd_question
+12. Now let us compare the current regression results to those in our previous example. Now you can either type or copy the command `summary(fit)` to print the regression results from our previous example.
+
+```{r}
+summary(fit)
+```
+
+*** .hint
+Answer: `summary(fit)`
+
+--- &text
+We can see that the regression results using new data formulation are exactly the same as those in the previous example. In practice, you can formulate your data in whichever way that is more convenient. 
+
+--- &text
+Besides using canonical link function logit for logistic regression, you can also use `probit` or `cloglog` link functions as needed. Now let's refit the previous model with `probit` link function.
+
+--- &cmd_question
+13. Now let's fit the logistic regression with probit link function using `fit_probit <- glm(cbind(dead,alive) ~ sex + ldose, family=binomial(link = "probit"), data=data)`. You can either copy or type the command `fit_probit <- glm(cbind(dead,alive) ~ sex + ldose, family=binomial(link = "probit"), data=data)`.
+
+```{r}
+fit_probit <- glm(cbind(dead,alive) ~ sex + ldose, family=binomial(link = "probit"), data=data)
+```
+
+*** .hint
+Answer: `fit_probit <- glm(cbind(dead,alive) ~ sex + ldose, family=binomial(link = "probit"), data=data)`
+
+--- &cmd_question
+14. Now let's check the regression results using `summary(fit_probit)`. You can either copy or type the command `summary(fit_probit)`.
+
+```{r}
+summary(fit_probit)
+```
+
+*** .hint
+Answer: `summary(fit_probit)`
+
+--- &text
+Note the values of regression coefficients using probit link are different than those using logit link as the link functions are different. When interpreting the regression coefficients, you can transform the coefficients using inverse link function to return to the original scale.
+
+--- &text
+Congratulations! You have finished all the contents in this lesson! References: Stats 306a Slides on "Generalized Lienar Models in R" by Gill Ward. Link: http://www.stanford.edu/class/stats306a/RforGLM.pdf. 
+
+--- &text
+END OF LESSION "Logistic Regression"

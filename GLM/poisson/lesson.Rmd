@@ -1,0 +1,164 @@
+Lesson Name:  poisson
+Course Name:  GLM
+Type:         Standard
+Author:       Bing He
+Organization: JHU Biostatistics
+Version:      2.1.1
+================================================================
+
+--- &text
+
+This is the second lession "Poisson Regression" of the course "Generalized Linear Regression". In R, the function `glm()` is used to fit generalized linear regression. In this lesson, we will focus on Poisson Regression. There are in total 12 questions in this lesson.
+
+--- &text
+Let's start with an example. Suppose we want to investigate whether the number of awards earned by students at high school is associated with the score on their final exam in math, while controlling for their enrolled type of programs (e.g., vocational, general or academic). We have collected the number of awards in the past 3 years, math score and program type for 200 students.
+
+--- &cmd_question
+1. Now let's read in data using `data <- read.csv("./GLM/poisson/data.txt",header=T)`. Now you can either type or copy the command `data <- read.csv("./GLM/poisson/data.txt",header=T)`.
+
+```{r}
+data <- read.csv("./GLM/poisson/data.txt",header=T)
+```
+
+*** .hint
+Answer: `data <- read.csv("./GLM/poisson/data.txt",header=T)`
+
+--- &cmd_question
+2. Now let's take a look at the data using `head(data)`. Now you can either type or copy the command `head(data)`.
+
+```{r}
+head(data)
+```
+
+*** .hint
+Answer: `head(data)`
+
+--- &text
+We can see that each row corresponds to student. `num_awards` is the number of awards earned by the student. `prog` indicates the type of program that the student is enrolled in. `math` gives the math score in the final exam for the student. Our goal is to investigate whether the number of awards earned by students at high school is associated with the score on their final exam in math, while controlling for their enrolled type of programs (e.g., vocational, general or academic). 
+
+--- &cmd_question
+3. Now let's get a more comphrehensive summary on the data using `summary(data)`. Now you can either type or copy the command `summary(data)`.
+
+```{r}
+summary(data)
+```
+
+*** .hint
+Answer: `summary(data)`
+
+--- &text
+We can see that summary statistics are presented.
+
+--- &cmd_question
+3. Now let's fit a poisson regression using `fit <- glm(num_awards ~ prog + math, family=poisson, data=data)`. Assume that the number of awards follows a poisson distribution with a rate to be estimated. We now regress the number of awards on type of programs and math score in the final exam. Now you can either type or copy the command `fit <- glm(num_awards ~ prog + math, family=poisson, data=data)`.
+
+```{r}
+fit <- glm(num_awards ~ prog + math, family=poisson, data=data)
+```
+
+*** .hint
+Answer: `fit <- glm(num_awards ~ prog + math, family=poisson, data=data)`
+
+--- &text
+Note that here we specify the family as `poisson` distribution. In `glm()` the default link function for poisson distributed data is `log`.
+
+--- &cmd_question
+4. Now let's look at regression coefficient of the fitted model using `summary(fit)`. Now you can either type or copy the command `summary(fit)`.
+
+```{r}
+summary(fit)
+```
+
+*** .hint
+Answer: `summary(fit)`
+
+--- &text
+5. Now let's interpret the regression coefficients. 5.1 "math 0.07015" is the estimated regression coefficient for math; it suggests that after adjusting for type of programs, with one-unit increase in the math score, the log rate of earning awards increase by 0.07015 on average (p value 3.63e-11). 5.2 "progGeneral" and "progVocational" are the estimated regression coefficients for the categorical variable program type. Here the reference group is "Academic". The results suggest that while adjusting for math score, the log rate of earning awards for students in the general program is 1.08386 less than those for students in the academic program (p value 0.00248). Similarly, while adjusting for math score, the log rate of earning awards for students in the vocational program is 0.71405 less than those for students in the academic program (p value: 0.02566).
+
+--- &cmd_question
+6. Now let's find the confidence interval of the regression coefficients using `confint(fit, level=0.95)`. Now you can either type or copy the command `confint(fit, level=0.95)`.
+
+```{r}
+confint(fit,level=0.95)
+```
+
+*** .hint
+Answer: `confint(fit,level=0.95)`
+
+--- &mult_question
+Congratulations! You have successfully fitted and interpreted a poisson regression model. Now here is a review question for you: what distribution family we should use in `glm()` when fitting poisson regression?
+
+1. `binomial`
+2. `identity`
+_3. `poisson`_
+
+*** .hint
+The command we used for fitting the poisson regression in our example is `fit <- glm(num_awards ~ prog + math, family=poisson, data=data)`. We should use `poisson` family.
+
+--- &text
+7. Now let's use look at a slightly different example. In the above example, we assume that we have 3-year's complete data for all the 200 students. Now suppose that among the 200 students, some students are new and have only spent 1-2 years high school. We now include the length of time the students have been in high school in the data. `glm()` allows us to take the length of time into consideration using `offset`. Now let's begin!
+
+--- &cmd_question
+8. Now let's read in the new data `data2 <- read.csv("./GLM/poisson/data2.txt",header=T)`. Now you can either type or copy the command `data2 <- read.csv("./GLM/poisson/data2.txt",header=T)`.
+
+```{r}
+data2 <- read.csv("./GLM/poisson/data2.txt",header=T)
+```
+
+*** .hint
+Answer: `data2 <- read.csv("./GLM/poisson/data2.txt",header=T)`
+
+--- &cmd_question
+9. Now let us take a look at the data using `head(data2)`. Now you can either type or copy the command `head(data2)`.
+
+```{r}
+head(data2)
+```
+
+*** .hint
+Answer: `head(data2)`
+
+--- &text
+Now we can see that for each student, `length` indicates over a period of this length, the student earns the specified number of award.
+
+--- &cmd_question
+10. Now let us fit a poisson regression with `offset` using this new data formulation using `fit2 <- glm(num_awards ~ prog + math, offset = log(length), family=poisson, data=data2)`. Note that you should take the log of the offset, as the link function for poisson is log. Now you can either type or copy the command `fit2 <- glm(num_awards ~ prog + math, offset = log(length), family=poisson, data=data2)`.
+
+```{r}
+fit2 <- glm(num_awards ~ prog + math, offset = log(length), family=poisson, data=data2)
+```
+
+*** .hint
+Answer: `fit2 <- glm(num_awards ~ prog + math, offset = log(length), family=poisson, data=data2)`
+
+--- &cmd_question
+11. Now let us examine the regression coefficients using `summary(fit2)`. Now you can either type or copy the command `summary(fit2)` to print the summary of regression results.
+
+```{r}
+summary(fit2)
+```
+
+*** .hint
+Answer: `summary(fit2)`
+
+--- &text
+The regression coefficients here have similar explanation to those in our previous example. 
+
+--- &cmd_question
+12. Now let us compare the current regression results to those in our previous example. Now you can either type or copy the command `summary(fit)` to print the regression results from our previous example.
+
+```{r}
+summary(fit)
+```
+
+*** .hint
+Answer: `summary(fit)`
+
+--- &text
+We can see that the regression coefficients have changed after we incorporated the offset. 
+
+--- &text
+Congratulations! You have finished all the contents in this lesson! References: [1] http://www-m4.ma.tum.de/fileadmin/w00bdb/www/czado/lec6.pdf; [2] http://www.ats.ucla.edu/stat/r/dae/poissonreg.htm
+
+--- &text
+END OF LESSION "Poisson Regression"

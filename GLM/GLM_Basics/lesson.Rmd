@@ -1,0 +1,42 @@
+Lesson Name:  GLM Basics
+Course Name:  GLM
+Type:         Standard
+Author:       Bing He
+Organization: JHU Biostatistics
+Version:      2.1.1
+================================================================
+
+--- &text
+This is the introductory lession to Generalized Linear Regression (GLM) models in R. The GLM generalizes linear regression by allowing the linear model to be related to the response variable via a link function and by allowing the magnitude of the variance of each measurement to be a function of its predicted value. In R, GLM models are fitted with `glm()`. In this lesson, we will go through the arguments of `glm()`. In subsequent lessons, we will provide real data analysis examples for logistic regression and poisson regression. There are 2 questions in this lesson.
+
+--- &cmd_question
+1. Now let's start with getting help documentation on `glm()`. Now you can either copy or type `help(glm)`.
+
+```{r}
+help(glm)
+```
+
+*** .hint
+Answer: `help(glm)`
+
+--- &text
+Please read the Usage of `glm()`. The arguments that we need to pay special attention include `formula` which specifies the association between dependent variable and independent variable and `family` which specifies which distribution family and the link function the dependent variable follows.
+
+--- &cmd_question
+2. Now let's check what distribution families are available in R using `help(family)`. Now you can either copy or type `help(family)`.
+
+```{r}
+help(family)
+```
+
+*** .hint
+Answer: `help(family)`
+
+--- &text
+Please read the Usage of the help documentation, we can see that many commonly used distribution families and link functions are available in R. Note that the link function in the parenthesis following the distribution families are the default link function for the corresponding families. For some families, multiple link functions can be used other than the default one. For example, in logistic regression, binomial distirbution family can use `logit`, `probit`, `cloglog`, etc.
+
+--- &text
+Congratulations! You have finished all contents in "GLM Basics". Please proceed to real data analysis lessons with logistic regression and poisson regression.
+
+--- &text
+Reference: http://en.wikipedia.org/wiki/Generalized_linear_model
