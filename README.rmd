@@ -9,3 +9,8 @@ This course contains three lessons:
 
 Contact: Bing He, bhe3@jhu.edu. Thanks!
 
+### [Swirl](http://swirlstats.com/)
+
+"swirl is a software package for the R statistical programming language. Its purpose is to teach users statistics and R simultaneously and interactively." Check swirl [website](http://swirlstats.com/)!
+
+
